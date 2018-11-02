@@ -1,0 +1,4 @@
+rosdep
+rosinstall_generator
+wstool
+rosinstall
