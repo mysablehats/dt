@@ -20,10 +20,11 @@ echo "Building OpenCV" $version
 cd opencv-$version
 [[ -d build ]] || mkdir build
 cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE -D WITH_TBB=ON  -D WITH_V4L=ON -D CUDA_GENERATION=Auto ..
+cmake -DCMAKE_BUILD_TYPE=RELEASE -DWITH_TBB=ON  -DWITH_V4L=ON -DCUDA_GENERATION=Auto -Wno-deprecated-gpu-targets ..
 if make -j32 ; then
-    cp lib/cv2.so ../../../
-    echo "OpenCV" $version "built."
+    #cp lib/cv2.so ../../../
+    make install ## this makes my life easier since the catkin_make command is shorter. or does it~?
+    echo "OpenCV" $version "built and installed."
 else
     echo "Failed to build OpenCV. Please check the logs above."
     exit 1
