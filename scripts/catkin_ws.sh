@@ -3,7 +3,8 @@ MYDIR=/
 source /root/ros_catkin_ws/install_isolated/setup.bash
 mkdir -p $MYDIR/catkin_ws/src
 cd $MYDIR/catkin_ws/src
-git clone https://github.com/mysablehats/dense_flow.git --recursive # this won't be necessary since we will remove easylogging and libzip, but... https://github.com/frederico-klein/create_video.git
+git clone https://github.com/mysablehats/dense_flow.git
+
 #cd dense_flow
 #git checkout roslog
 #cd ..

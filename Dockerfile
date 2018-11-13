@@ -64,10 +64,12 @@ RUN /tmp/opencv.sh
 ## now ros things:
 ADD scripts/ros.sh /tmp
 RUN chmod +x /tmp/ros.sh && /tmp/ros.sh
+RUN echo "source /root/ros_catkin_ws/install_isolated/setup.bash" >> /etc/bash.bashrc
 ADD scripts/catkin_ws.sh /tmp
 RUN chmod +x /tmp/catkin_ws.sh && /tmp/catkin_ws.sh
 
 ADD scripts/entrypoint.sh /tmp
+ENV ROS_MASTER_URI=http://SATELLITE-S50-B:11311
 ENTRYPOINT ["/tmp/entrypoint.sh"]
 
 ## now getting the rars to generate the flows: will be needed for training and testing
