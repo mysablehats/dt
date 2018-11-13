@@ -71,7 +71,7 @@ RUN chmod +x /tmp/catkin_ws.sh && /tmp/catkin_ws.sh
 ADD scripts/entrypoint.sh /tmp
 ENV ROS_MASTER_URI=http://SATELLITE-S50-B:11311
 ENTRYPOINT ["/tmp/entrypoint.sh"]
-
+#CMD ["/root/ros_catkin_ws/install_isolated/bin/roslaunch","dense_flow","df.launch"]
 ## now getting the rars to generate the flows: will be needed for training and testing
 
 #WORKDIR /

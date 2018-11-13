@@ -17,4 +17,4 @@ else
       echo "found br0 docker network."
 fi
 
-nvidia-docker run --rm -it -h $MACHINENAME --network=br0 --ip=172.28.5.2 dt bash
+nvidia-docker run --rm -it -h $MACHINENAME --network=br0 --ip=172.28.5.2 dt bash -c "source /catkin_ws/devel/setup.bash && /root/ros_catkin_ws/install_isolated/bin/roslaunch dense_flow df.launch"
