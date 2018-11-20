@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+nvidia-docker build -t dt .
 echo "STARTING ROS DENSE_FLOW TSN DOCKER..."
 
 MACHINENAME=tsn_denseflow
