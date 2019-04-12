@@ -48,6 +48,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   yasm libjpeg-dev libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev python-dev python-numpy libtbb-dev libqt4-dev libgtk2.0-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils \
   # I like this:
   apt-utils \
+  ## ssh stuff
+  openssh-server\
+  libssl-dev \
   && rm -rf /var/lib/apt/lists/*
 
 ### now python STUFF
@@ -72,6 +75,22 @@ ADD scripts/entrypoint.sh /tmp
 ENV ROS_MASTER_URI=http://SATELLITE-S50-B:11311
 ENTRYPOINT ["/tmp/entrypoint.sh"]
 ADD scripts/start.sh /tmp
+
+# to get ssh working for the ros machine to be functional: (adapted from docker docs running_ssh_service)
+RUN mkdir /var/run/sshd \
+    && echo 'root:ros_ros' | chpasswd \
+    && sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+    ##in case you want to change the default sshd port 
+    #&& sed -i 's/Port 22/Port 522/' /etc/ssh/sshd_config \
+    && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+ENV NOTVISIBLE "in users profile" \
+    && echo "export VISIBLE=now" >> /etc/profile
+
+EXPOSE 22
+#add my snazzy banner
+ADD banner.txt /tmp/
+
 #CMD ["/root/ros_catkin_ws/install_isolated/bin/roslaunch","dense_flow","df.launch"]
 ## now getting the rars to generate the flows: will be needed for training and testing
 
