@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 PASSWD=$1
 MYUSERNAME=frederico
-DOCKERHOSTNAME=poop
+DOCKERHOSTNAME=`hostname`
 THISVOLUMENAME=sshvolume3
 DOCKERMACHINEIP=172.28.5.2
-DOCKERMACHINENAME=dt
+DOCKERMACHINENAME=mysablehats/dt:stable
+# DOCKERMACHINENAME=dt
 MACHINEHOSTNAME=tsn_denseflow
 CATKINWSPATH=/catkin_ws
+BUILDDOCKERBEFORERUN=false
 #export NV_GPU=1
 if [ -z "$PASSWD" ]
 then
   echo "you need to input your own password to mount the internal ssh volume that is shared between docker and the docker host!"
   echo "usage is: $0 <your-password-here>"
 else
-  while true; do
+  while true ; do
     {
-    nvidia-docker build -t $DOCKERMACHINENAME .
-    #nvidia-docker build --no-cache -t $DOCKERMACHINENAME .
+      if $BUILDDOCKERBEFORERUN ; then
+        nvidia-docker build -t $DOCKERMACHINENAME .
+        #nvidia-docker build --no-cache -t $DOCKERMACHINENAME .
+      fi
     } ||
     {
     echo "something went wrong..." &&
