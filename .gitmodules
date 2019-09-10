@@ -1,3 +1,4 @@
 [submodule "catkin_ws/src/dense_flow"]
 	path = catkin_ws/src/dense_flow
 	url = git@github.com:mysablehats/dense_flow
+  ignore = dirty
