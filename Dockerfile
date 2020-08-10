@@ -1,10 +1,15 @@
-FROM nvidia/cuda:8.0-cudnn5-devel
+FROM nvidia/cuda:6.5-devel
 ENV DEBIAN_FRONTEND noninteractive
+
+
+##something is wrong, idk what, but this may help
+RUN rm /etc/apt/sources.list.d/cuda.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   unzip \
   wget \
   cmake \
+  dpkg \
   build-essential \
   libboost-all-dev \
   python-dev \
@@ -56,8 +61,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ### now python STUFF
 ENV PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 RUN pip install --upgrade pip
-ADD requirements.txt ./
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+#ADD requirements.txt ./
+#RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 ##installing opencv as it is a dependency, before we compile dense_flow
 WORKDIR /
@@ -67,9 +72,7 @@ RUN /tmp/opencv.sh
 ## now ros things:
 ADD scripts/ros.sh /tmp
 RUN chmod +x /tmp/ros.sh && /tmp/ros.sh
-RUN echo "source /root/ros_catkin_ws/install_isolated/setup.bash" >> /etc/bash.bashrc
-ADD scripts/catkin_ws.sh /tmp
-RUN chmod +x /tmp/catkin_ws.sh && /tmp/catkin_ws.sh
+#RUN echo "source /root/ros_catkin_ws/install_isolated/setup.bash" >> /etc/bash.bashrc
 
 ADD scripts/entrypoint.sh /tmp
 ENV ROS_MASTER_URI=http://SATELLITE-S50-B:11311
@@ -80,7 +83,7 @@ ADD scripts/start.sh /tmp
 RUN mkdir /var/run/sshd \
     && echo 'root:ros_ros' | chpasswd \
     && sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
-    ##in case you want to change the default sshd port 
+    ##in case you want to change the default sshd port
     #&& sed -i 's/Port 22/Port 522/' /etc/ssh/sshd_config \
     && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
@@ -90,6 +93,9 @@ ENV NOTVISIBLE "in users profile" \
 EXPOSE 22
 #add my snazzy banner
 ADD banner.txt /tmp/
+
+ADD scripts/catkin_ws.sh /tmp
+RUN chmod +x /tmp/catkin_ws.sh && /tmp/catkin_ws.sh
 
 #CMD ["/root/ros_catkin_ws/install_isolated/bin/roslaunch","dense_flow","df.launch"]
 ## now getting the rars to generate the flows: will be needed for training and testing

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 MYDIR=/
-source /root/ros_catkin_ws/install_isolated/setup.bash
+source /opt/ros/indigo/setup.bash
 mkdir -p $MYDIR/catkin_ws/src
 cd $MYDIR/catkin_ws/src
 DIRECTORYDF=$MYDIR/catkin_ws/src/dense_flow
@@ -15,6 +15,9 @@ fi
 #latest version is too new. it requires opencv3 and since i don't want to install
 #2 versions or change the tsn code to use opencv3 we will use an older version of
 # cv_bridge
+
+#apt-get update && apt-get install libyaml-cpp-dev
+
 DIRECTORYVIS=$MYDIR/catkin_ws/src/vision_opencv-1.11.16
 #if vision_opencv is not there, create it
 if [ ! -d "$DIRECTORYVIS" ]; then
